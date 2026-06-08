@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลงทะเบียนอบรม Excel ขั้นพื้นฐาน — TSDC</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue-dark:#1a3a5c;--blue-mid:#0d5f8a;--blue-light:#1a8cb3;--blue-pale:#e6f4fb;--border:#dee5ed;--bg:#f0f4f8;--card:#fff;--text:#1a2a3a;--muted:#5a7090;}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.nav{background:linear-gradient(135deg,var(--blue-dark),var(--blue-mid));color:#fff;padding:0 2rem;display:flex;align-items:center;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.nav-brand{font-family:'Prompt',sans-serif;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.nav-brand span{opacity:.7;font-size:12px;font-weight:400}
+.wrap{padding:2rem;max-width:720px;margin:0 auto}
+.form-card{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,60,120,.10)}
+.form-header{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-mid) 60%,var(--blue-light) 100%);padding:2rem;color:#fff;position:relative;overflow:hidden}
+.form-header::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,255,255,.05);border-radius:50%}
+.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:500;margin-bottom:14px}
+.header-title{font-family:'Prompt',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;line-height:1.3;position:relative}
+.header-sub{font-size:14px;opacity:.85;position:relative}
+.header-dept{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.13);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:500;margin-top:14px;position:relative}
+.form-body{padding:2rem}
+.section-label{font-family:'Prompt',sans-serif;font-size:11px;font-weight:700;color:var(--blue-light);letter-spacing:1.2px;text-transform:uppercase;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.field-group{margin-bottom:1.2rem}
+.field-label{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.field-label .req{color:#e05252;margin-left:2px}
+.field-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:15px;color:var(--text);background:#fff;transition:border-color .15s,box-shadow .15s;outline:none;appearance:none;-webkit-appearance:none}
+.field-input:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(26,140,179,.12)}
+select.field-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.session-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.session-card input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.session-card-label{display:block;border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .15s;background:#fff;position:relative}
+.session-card-label:hover{border-color:var(--blue-light);background:var(--blue-pale)}
+.session-card input[type=radio]:checked+.session-card-label{border-color:var(--blue-light);background:var(--blue-pale);box-shadow:0 0 0 3px rgba(26,140,179,.12)}
+.session-date{font-family:'Prompt',sans-serif;font-size:14px;font-weight:700;color:var(--blue-dark);margin-bottom:4px}
+.session-time{font-size:13px;color:var(--muted)}
+.session-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);position:absolute;top:14px;right:14px;transition:all .15s}
+.session-card input[type=radio]:checked+.session-card-label .session-dot{border-color:var(--blue-light);background:var(--blue-light)}
+.session-card input[type=radio]:checked+.session-card-label .session-dot::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:#fff;margin:4px auto}
+.note-box{background:var(--blue-pale);border-left:3px solid var(--blue-light);border-radius:0 8px 8px 0;padding:10px 14px;font-size:13px;color:var(--muted);margin-top:1.25rem;line-height:1.7}
+.err-msg{color:#e05252;font-size:13px;margin-top:12px;display:none}
+.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue-dark),var(--blue-mid));color:#fff;border:none;border-radius:12px;font-family:'Prompt',sans-serif;font-size:16px;font-weight:600;cursor:pointer;margin-top:1.5rem;transition:opacity .15s,transform .1s}
+.btn-submit:hover{opacity:.9}
+.btn-submit:active{transform:scale(.99)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loading-overlay.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--blue-mid);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:'Prompt',sans-serif;font-size:14px;color:var(--blue-mid);font-weight:600}
+.success-screen{display:none;text-align:center;padding:3rem 2rem}
+.success-icon{width:70px;height:70px;background:linear-gradient(135deg,var(--blue-dark),var(--blue-light));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:32px;color:#fff}
+.success-title{font-family:'Prompt',sans-serif;font-size:22px;font-weight:700;color:var(--blue-dark);margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:1.5rem}
+.summary-card{background:var(--bg);border-radius:12px;padding:1.2rem 1.5rem;text-align:left;margin-bottom:1.5rem}
+.summary-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px}
+.summary-row:last-child{border-bottom:none}
+.summary-key{color:var(--muted)}
+.summary-val{font-weight:600;color:var(--blue-dark)}
+.btn-back{padding:10px 24px;border:1.5px solid var(--border);background:#fff;border-radius:10px;font-family:'Prompt',sans-serif;font-size:14px;font-weight:600;cursor:pointer;color:var(--text);transition:all .15s}
+.btn-back:hover{border-color:var(--blue-light);color:var(--blue-mid)}
+@media(max-width:600px){
+  .grid-2,.session-cards{grid-template-columns:1fr}
+  .wrap{padding:1rem}
+  .form-body{padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">กำลังบันทึกข้อมูล...</div>
+</div>
+
+<nav class="nav">
+  <div class="nav-brand">📊 อบรม Excel TSDC <span>| Warehouse System</span></div>
+</nav>
+
+<div class="wrap">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="header-badge">📋 แบบฟอร์มลงทะเบียน</div>
+      <h1 class="header-title">ลงทะเบียนเข้าอบรม<br>Microsoft Excel ขั้นพื้นฐาน</h1>
+      <p class="header-sub">กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</p>
+      <div class="header-dept">🏭 แผนก Warehouse System (TSDC)</div>
+    </div>
+
+    <div class="form-body" id="formBody">
+      <p class="section-label">👤 ข้อมูลส่วนตัว</p>
+      <div class="field-group">
+        <label class="field-label">ชื่อ - นามสกุล <span class="req">*</span></label>
+        <input class="field-input" type="text" id="fullname" placeholder="กรอกชื่อ-นามสกุล">
+      </div>
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">แผนก <span class="req">*</span></label>
+          <select class="field-input" id="department">
+            <option value="" disabled selected>-- เลือกแผนก --</option>
+            <option>Stock Coolroom</option>
+            <option>Stock 3C</option>
+            <option>Goods Return</option>
+            <option>Stock 3A</option>
+            <option>Goods Receive</option>
+            <option>Stock F1A</option>
+            <option>Stock F1B</option>
+            <option>Stock 3B</option>
+            <option>Sorter</option>
+            <option>Outbound</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">ตำแหน่ง <span class="req">*</span></label>
+          <select class="field-input" id="position">
+            <option value="" disabled selected>-- เลือกตำแหน่ง --</option>
+            <option>หัวหน้าแผนก</option>
+            <option>ผู้ช่วยหัวหน้าแผนก</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="section-label" style="margin-top:1.5rem">📅 เลือกวันที่เข้าอบรม</p>
+      <div class="session-cards">
+        <div class="session-card">
+          <input type="radio" name="session" id="s1" value="20 มิถุนายน 2569">
+          <label class="session-card-label" for="s1">
+            <div class="session-dot"></div>
+            <div class="session-date">20 มิถุนายน 2569</div>
+            <div class="session-time">⏰ 13:00 – 15:00 น.</div>
+          </label>
+        </div>
+        <div class="session-card">
+          <input type="radio" name="session" id="s2" value="22 มิถุนายน 2569">
+          <label class="session-card-label" for="s2">
+            <div class="session-dot"></div>
+            <div class="session-date">22 มิถุนายน 2569</div>
+            <div class="session-time">⏰ 13:00 – 15:00 น.</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <strong>หมายเหตุ:</strong> กรุณาเลือกรอบที่ท่านสะดวกเข้าร่วม
+      </div>
+      <p class="err-msg" id="errMsg">⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง</p>
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">✅ ยืนยันการลงทะเบียน</button>
+    </div>
+
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">ลงทะเบียนสำเร็จ!</h2>
+      <p class="success-sub">ข้อมูลถูกบันทึกเรียบร้อยแล้ว<br>ทีมงานจะแจ้งรายละเอียดก่อนวันอบรม</p>
+      <div class="summary-card">
+        <div class="summary-row"><span class="summary-key">ชื่อ-นามสกุล</span><span class="summary-val" id="s-name"></span></div>
+        <div class="summary-row"><span class="summary-key">แผนก</span><span class="summary-val" id="s-dept"></span></div>
+        <div class="summary-row"><span class="summary-key">ตำแหน่ง</span><span class="summary-val" id="s-pos"></span></div>
+        <div class="summary-row"><span class="summary-key">วันที่อบรม</span><span class="summary-val" id="s-date"></span></div>
+        <div class="summary-row"><span class="summary-key">เวลา</span><span class="summary-val">13:00 – 15:00 น.</span></div>
+        <div class="summary-row"><span class="summary-key">หมายเลขลงทะเบียน</span><span class="summary-val" id="s-id"></span></div>
+      </div>
+      <button class="btn-back" onclick="resetForm()">⬅ ลงทะเบียนคนถัดไป</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  วาง Google Apps Script URL ของคุณตรงนี้
+//  (URL เดียวกับที่ใช้ในไฟล์ admin)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPtD7j43duPfJxPDad3731twtMtBwNF7Wrtu3hSw_98lOFyP6deARzVnH5hflg0DI8/exec';
+// ══════════════════════════════════════════════
+
+function showLoading(){ document.getElementById('loadingOverlay').classList.add('show'); }
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('show'); }
+
+async function handleSubmit(){
+  const name = document.getElementById('fullname').value.trim();
+  const dept = document.getElementById('department').value;
+  const pos  = document.getElementById('position').value;
+  const sess = document.querySelector('input[name=session]:checked');
+  if(!name||!dept||!pos||!sess){
+    document.getElementById('errMsg').style.display='block'; return;
+  }
+  document.getElementById('errMsg').style.display='none';
+  const id = 'TSDC-'+String(Date.now()).slice(-6);
+  showLoading();
+  document.getElementById('submitBtn').disabled = true;
+  try {
+    await fetch(SCRIPT_URL,{
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,department:dept,position:pos,date:sess.value,id})
+    });
+    hideLoading();
+    document.getElementById('s-name').textContent = name;
+    document.getElementById('s-dept').textContent = dept;
+    document.getElementById('s-pos').textContent  = pos;
+    document.getElementById('s-date').textContent = sess.value;
+    document.getElementById('s-id').textContent   = id;
+    document.getElementById('formBody').style.display      = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  } catch(err){
+    hideLoading();
+    document.getElementById('submitBtn').disabled = false;
+    alert('❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+  }
+}
+
+function resetForm(){
+  document.getElementById('fullname').value   = '';
+  document.getElementById('department').value = '';
+  document.getElementById('position').value   = '';
+  document.querySelectorAll('input[name=session]').forEach(r=>r.checked=false);
+  document.getElementById('submitBtn').disabled      = false;
+  document.getElementById('formBody').style.display      = 'block';
+  document.getElementById('successScreen').style.display = 'none';
+}
+</script>
+</body>
+</html>
